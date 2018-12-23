@@ -1,4 +1,5 @@
-(ns aoc-2018.01.02)
+(ns aoc-2018.01.02
+  (:require [clojure.math.combinatorics :as combo]))
 
 (def input ["cnjxpritdzhubeseewfmqagkul"
             "cwyxpgitdzhvbosyewfmqagkul"
@@ -271,3 +272,29 @@
 
 
 ;; star 2
+(defn differ-by?
+  [n s1 s2]
+  (loop [diffs 0
+         s1    s1
+         s2    s2]
+    (cond (> diffs n) false
+          (empty? s1) true
+          :else       (recur (if (= (first s1) (first s2)) diffs (inc diffs))
+                             (rest s1)
+                             (rest s2)))))
+
+(defn common-letters
+  [s1 s2]
+  (reduce (fn [s [c1 c2]]
+            (if (= c1 c2)
+              (str s c1)
+              s))
+          ""
+          (map vector s1 s2)))
+
+(defn costumes
+  []
+  (->> (combo/combinations input 2)
+       (filter (fn [[s1 s2]] (differ-by? 1 s1 s2)))
+       first
+       (apply common-letters)))

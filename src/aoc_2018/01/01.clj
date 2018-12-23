@@ -972,3 +972,5 @@
       (if (= 2 (get freqs freq))
         freq
         (recur (rest inputs) freqs (+ freq (first inputs)))))))
+
+(double-freq input)
